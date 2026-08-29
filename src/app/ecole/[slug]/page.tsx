@@ -1,0 +1,115 @@
+import { prisma } from "@/lib/prisma";
+import { notFound } from "next/navigation";
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  const ecole = await prisma.school.findUnique({
+    where: { slug },
+    include: { city: true, commune: true },
+  });
+
+  if (!ecole) {
+    return { title: "École non trouvée | ECOLES CI" };
+  }
+
+  const typeLisible: Record<string, string> = {
+    MATERNELLE: "École maternelle",
+    PRIMAIRE: "École primaire",
+    COLLEGE: "Collège",
+    LYCEE: "Lycée",
+    PROFESSIONNEL: "École professionnelle",
+    UNIVERSITE: "Université",
+  };
+
+  const titre = `${typeLisible[ecole.type] ?? "Établissement"} ${
+    ecole.status === "PRIVE" ? "privé" : "public"
+  } à ${ecole.city.name} | ${ecole.name} | ECOLES CI`;
+
+  const description =
+    ecole.description ??
+    `${ecole.name}, ${typeLisible[ecole.type]?.toLowerCase() ?? "établissement"} situé à ${
+      ecole.commune?.name ? `${ecole.commune.name}, ` : ""
+    }${ecole.city.name}, Côte d'Ivoire.`;
+
+  return {
+    title: titre,
+    description,
+    openGraph: {
+      title: titre,
+      description,
+      type: "website",
+    },
+  };
+}
+
+export default async function FicheEcole({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  const ecole = await prisma.school.findUnique({
+    where: { slug },
+    include: {
+      city: true,
+      commune: true,
+    },
+  });
+
+  if (!ecole) {
+    notFound();
+  }
+
+  return (
+    <main className="min-h-screen bg-white">
+      <div className="h-64 bg-zinc-800 flex items-end px-6 py-6">
+        <div className="max-w-5xl mx-auto w-full text-white">
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-semibold">{ecole.name}</h1>
+            {ecole.isVerified && (
+              <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
+                Établissement vérifié
+              </span>
+            )}
+          </div>
+          <p className="text-zinc-300 mt-1">
+            {ecole.commune?.name}, {ecole.city.name}
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-6 py-10">
+        <div className="grid sm:grid-cols-3 gap-4 mb-10">
+          <div className="border border-zinc-200 rounded-xl p-4">
+            <p className="text-sm text-zinc-500">Type</p>
+            <p className="font-medium text-zinc-900">{ecole.type}</p>
+          </div>
+          <div className="border border-zinc-200 rounded-xl p-4">
+            <p className="text-sm text-zinc-500">Statut</p>
+            <p className="font-medium text-zinc-900">{ecole.status}</p>
+          </div>
+          <div className="border border-zinc-200 rounded-xl p-4">
+            <p className="text-sm text-zinc-500">Contact</p>
+            <p className="font-medium text-zinc-900">
+              {ecole.phone ?? "Information non disponible"}
+            </p>
+          </div>
+        </div>
+
+        <section>
+          <h2 className="text-xl font-semibold text-zinc-900 mb-3">
+            Présentation
+          </h2>
+          <p className="text-zinc-600">
+            {ecole.description ?? "Information non disponible"}
+          </p>
+        </section>
+      </div>
+    </main>
+  );
+}

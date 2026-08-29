@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SchoolType {
+  MATERNELLE
+  PRIMAIRE
+  COLLEGE
+  LYCEE
+  PROFESSIONNEL
+  UNIVERSITE
+}
+
+enum SchoolStatus {
+  PUBLIC
+  PRIVE
+}
+
+enum DataSource {
+  PUBLIQUE
+  ETABLISSEMENT
+}
+
+model Region {
+  id     String @id @default(cuid())
+  name   String @unique
+  cities City[]
+}
+
+model City {
+  id       String    @id @default(cuid())
+  name     String
+  region   Region    @relation(fields: [regionId], references: [id])
+  regionId String
+  communes Commune[]
+  schools  School[]
+
+  @@index([name])
+}
+
+model Commune {
+  id      String   @id @default(cuid())
+  name    String
+  city    City     @relation(fields: [cityId], references: [id])
+  cityId  String
+  schools School[]
+}
+
+model School {
+  id           String       @id @default(cuid())
+  slug         String       @unique
+  name         String
+  type         SchoolType
+  status       SchoolStatus
+  description  String?
+  foundedYear  Int?
+  classCount   Int?
+  studentCount Int?
+  languages    String[]
+
+  city         City     @relation(fields: [cityId], references: [id])
+  cityId       String
+  commune      Commune? @relation(fields: [communeId], references: [id])
+  communeId    String?
+  neighborhood String?
+  address      String?
+  latitude     Float?
+  longitude    Float?
+
+  phone    String?
+  whatsapp String?
+  email    String?
+  website  String?
+
+  isVerified    Boolean @default(false)
+  coverImageUrl String?
+  logoUrl       String?
+
+  source         DataSource @default(PUBLIQUE)
+  sourceUrl      String?
+  lastVerifiedAt DateTime?
+
+  photos     SchoolPhoto[]
+  programs   SchoolProgram[]
+  fees       SchoolFee[]
+  facilities SchoolFacility[]
+  reviews    SchoolReview[]
+  news       SchoolNews[]
+  events     SchoolEvent[]
+  claim      VerificationRequest?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+  @@index([type, status])
+  @@index([cityId])
+}
+
+model SchoolPhoto {
+  id       String  @id @default(cuid())
+  school   School  @relation(fields: [schoolId], references: [id])
+  schoolId String
+  url      String
+  category String?
+  order    Int     @default(0)
+}
+
+model SchoolProgram {
+  id       String @id @default(cuid())
+  school   School @relation(fields: [schoolId], references: [id])
+  schoolId String
+  level    String
+}
+
+model SchoolFee {
+  id              String @id @default(cuid())
+  school          School @relation(fields: [schoolId], references: [id])
+  schoolId        String
+  level           String
+  registrationFee Int?
+  tuitionFee      Int?
+  otherFees       Int?
+  schoolYear      String
+}
+
+model SchoolFacility {
+  id        String  @id @default(cuid())
+  school    School  @relation(fields: [schoolId], references: [id])
+  schoolId  String
+  type      String
+  available Boolean @default(true)
+}
+
+model SchoolReview {
+  id         String   @id @default(cuid())
+  school     School   @relation(fields: [schoolId], references: [id])
+  schoolId   String
+  authorName String
+  rating     Int
+  comment    String?
+  isApproved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model SchoolNews {
+  id        String   @id @default(cuid())
+  school    School   @relation(fields: [schoolId], references: [id])
+  schoolId  String
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model SchoolEvent {
+  id       String   @id @default(cuid())
+  school   School   @relation(fields: [schoolId], references: [id])
+  schoolId String
+  title    String
+  date     DateTime
+}
+
+model User {
+  id        String                @id @default(cuid())
+  email     String                @unique
+  name      String?
+  role      String                @default("USER")
+  createdAt DateTime              @default(now())
+  claims    VerificationRequest[]
+}
+
+model VerificationRequest {
+  id       String @id @default(cuid())
+  school   School @relation(fields: [schoolId], references: [id])
+  schoolId String @unique
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+  status   String @default("PENDING")
+  createdAt DateTime @default(now())
+}
