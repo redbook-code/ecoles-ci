@@ -1,4 +1,4 @@
-export default function Home() {
+import Link from "next/link";export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       <section className="relative flex flex-col items-center justify-center min-h-[85vh] px-6 text-center bg-gradient-to-b from-zinc-900 to-zinc-800 text-white">
@@ -8,7 +8,7 @@ export default function Home() {
         <p className="max-w-xl mt-4 text-lg text-zinc-300">
           Découvrez, comparez et contactez les établissements scolaires partout en Côte d&apos;Ivoire.
         </p>
-        <div className="w-full max-w-3xl mt-10 bg-white rounded-2xl shadow-xl p-4 flex flex-col sm:flex-row gap-3">
+                <div className="w-full max-w-3xl mt-10 bg-white rounded-2xl shadow-xl p-4 flex flex-col sm:flex-row gap-3">
           <input
             type="text"
             placeholder="Nom de l'établissement"
@@ -19,9 +19,12 @@ export default function Home() {
             placeholder="Ville / commune"
             className="flex-1 px-4 py-3 rounded-xl border border-zinc-200 text-zinc-900 outline-none"
           />
-          <button className="px-6 py-3 rounded-xl bg-zinc-900 text-white font-medium hover:bg-zinc-700 transition">
+          <Link
+            href="/recherche"
+            className="px-6 py-3 rounded-xl bg-zinc-900 text-white font-medium hover:bg-zinc-700 transition text-center"
+          >
             Rechercher
-          </button>
+          </Link>
         </div>
       </section>
 
