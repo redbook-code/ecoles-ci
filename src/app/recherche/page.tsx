@@ -1,19 +1,33 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import { Prisma } from "@prisma/client";
 
 const PAR_PAGE = 20;
 
 export default async function Recherche({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; q?: string; ville?: string; type?: string }>;
 }) {
-  const { page } = await searchParams;
+  const { page, q, ville, type } = await searchParams;
   const pageActuelle = Math.max(1, parseInt(page ?? "1", 10) || 1);
 
+  const where: Prisma.SchoolWhereInput = {};
+
+  if (q) {
+    where.name = { contains: q, mode: "insensitive" };
+  }
+  if (ville) {
+    where.city = { name: { contains: ville, mode: "insensitive" } };
+  }
+  if (type) {
+    where.type = type as never;
+  }
+
   const [total, ecoles] = await Promise.all([
-    prisma.school.count(),
+    prisma.school.count({ where }),
     prisma.school.findMany({
+      where,
       include: { city: true, commune: true },
       orderBy: { name: "asc" },
       skip: (pageActuelle - 1) * PAR_PAGE,
@@ -21,7 +35,16 @@ export default async function Recherche({
     }),
   ]);
 
-  const totalPages = Math.ceil(total / PAR_PAGE);
+  const totalPages = Math.max(1, Math.ceil(total / PAR_PAGE));
+
+  const paramsForLink = (p: number) => {
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    if (ville) params.set("ville", ville);
+    if (type) params.set("type", type);
+    params.set("page", String(p));
+    return `/recherche?${params.toString()}`;
+  };
 
   return (
     <main className="min-h-screen bg-white px-6 py-12">
@@ -29,7 +52,15 @@ export default async function Recherche({
         <h1 className="text-2xl font-semibold text-zinc-900 mb-2">
           Résultats de recherche
         </h1>
-        <p className="text-sm text-zinc-500 mb-8">{total} établissements</p>
+        <p className="text-sm text-zinc-500 mb-8">
+          {total} établissement{total > 1 ? "s" : ""}
+          {q ? ` pour "${q}"` : ""}
+          {ville ? ` à ${ville}` : ""}
+        </p>
+
+        {ecoles.length === 0 && (
+          <p className="text-zinc-500">Aucun établissement ne correspond à cette recherche.</p>
+        )}
 
         <div className="grid gap-4">
           {ecoles.map((ecole) => (
@@ -69,7 +100,7 @@ export default async function Recherche({
           <div className="flex gap-2">
             {pageActuelle > 1 && (
               <Link
-                href={`/recherche?page=${pageActuelle - 1}`}
+                href={paramsForLink(pageActuelle - 1)}
                 className="px-3 py-1.5 border border-zinc-300 rounded-lg hover:bg-zinc-100"
               >
                 Précédent
@@ -77,7 +108,7 @@ export default async function Recherche({
             )}
             {pageActuelle < totalPages && (
               <Link
-                href={`/recherche?page=${pageActuelle + 1}`}
+                href={paramsForLink(pageActuelle + 1)}
                 className="px-3 py-1.5 border border-zinc-300 rounded-lg hover:bg-zinc-100"
               >
                 Suivant
