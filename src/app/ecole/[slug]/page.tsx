@@ -1,4 +1,5 @@
-import { prisma } from "@/lib/prisma";
+import { getCoordonneesVille } from "@/lib/coordonnees-villes";
+import CarteEcoleUniqueWrapper from "@/components/CarteEcoleUniqueWrapper";import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 export async function generateMetadata({
   params,
@@ -107,6 +108,21 @@ export default async function FicheEcole({
           </h2>
           <p className="text-zinc-600">
             {ecole.description ?? "Information non disponible"}
+          </p>
+        </section>
+        <section className="mt-10">
+          <h2 className="text-xl font-semibold text-zinc-900 mb-3">
+            Localisation
+          </h2>
+          <div className="h-80 rounded-xl overflow-hidden border border-zinc-200">
+            <CarteEcoleUniqueWrapper
+              nom={ecole.name}
+              latitude={getCoordonneesVille(ecole.city.name)[0]}
+              longitude={getCoordonneesVille(ecole.city.name)[1]}
+            />
+          </div>
+          <p className="text-xs text-zinc-400 mt-2">
+            Position approximative basée sur la ville ({ecole.city.name}).
           </p>
         </section>
       </div>
