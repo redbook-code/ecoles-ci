@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
-      <section className="relative flex flex-col items-center justify-center min-h-[85vh] px-6 text-center bg-gradient-to-b from-zinc-900 to-zinc-800 text-white">
+      <section className="relative flex flex-col items-center justify-center min-h-[85vh] px-6 text-center bg-gradient-to-b from-blue-900 to-blue-800 text-white">
         <h1 className="max-w-3xl text-4xl sm:text-5xl font-semibold tracking-tight">
           Trouvez l&apos;école idéale en Côte d&apos;Ivoire
         </h1>
@@ -28,9 +28,9 @@ export default function Home() {
             placeholder="Ville / commune"
             className="flex-1 px-4 py-3 rounded-xl border border-zinc-200 text-zinc-900 outline-none"
           />
-          <button
+                    <button
             type="submit"
-            className="px-6 py-3 rounded-xl bg-zinc-900 text-white font-medium hover:bg-zinc-700 transition"
+            className="px-6 py-3 rounded-xl bg-blue-900 text-white font-medium hover:bg-blue-800 transition"
           >
             Rechercher
           </button>
