@@ -68,7 +68,7 @@ export default async function FicheEcole({
 
   return (
     <main className="min-h-screen bg-white">
-      <div className="h-64 bg-zinc-800 flex items-end px-6 py-6">
+            <div className="h-64 bg-blue-900 flex items-end px-6 py-6">
         <div className="max-w-5xl mx-auto w-full text-white">
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-semibold">{ecole.name}</h1>

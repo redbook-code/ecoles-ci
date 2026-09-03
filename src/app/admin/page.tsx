@@ -36,7 +36,7 @@ export default async function AdminDashboard({
           </h1>
           <Link
             href="/admin/ecoles/nouvelle"
-            className="px-4 py-2 rounded-lg bg-zinc-900 text-white text-sm font-medium hover:bg-zinc-700 transition"
+                       className="px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-medium hover:bg-blue-800 transition"
           >
             + Ajouter une école
           </Link>

@@ -85,7 +85,7 @@ export default async function Recherche({
               </div>
               <Link
                 href={`/ecole/${ecole.slug}`}
-                className="px-4 py-2 rounded-lg bg-zinc-900 text-white text-sm font-medium hover:bg-zinc-700 transition"
+                                className="px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-medium hover:bg-blue-800 transition"
               >
                 Voir l&apos;école
               </Link>
