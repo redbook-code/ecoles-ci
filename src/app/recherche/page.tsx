@@ -1,3 +1,5 @@
+import CompareCheckbox from "@/components/CompareCheckbox";
+import CompareBar from "@/components/CompareBar";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Prisma } from "@prisma/client";
@@ -82,7 +84,7 @@ export default async function Recherche({
                   {ecole.commune?.name ? `${ecole.commune.name}, ` : ""}
                   {ecole.city.name}
                 </p>
-              </div>
+              </div>                <CompareCheckbox ecole={{ id: ecole.id, slug: ecole.slug, name: ecole.name }} />
               <Link
                 href={`/ecole/${ecole.slug}`}
                                 className="px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-medium hover:bg-blue-800 transition"
@@ -116,7 +118,7 @@ export default async function Recherche({
             )}
           </div>
         </div>
-      </div>
+      </div>      <CompareBar />
     </main>
   );
 }
