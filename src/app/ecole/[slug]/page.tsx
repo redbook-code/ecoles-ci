@@ -1,3 +1,4 @@
+import ClaimSchoolForm from "@/components/ClaimSchoolForm";
 import { getCoordonneesVille } from "@/lib/coordonnees-villes";
 import CarteEcoleUniqueWrapper from "@/components/CarteEcoleUniqueWrapper";import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
@@ -124,6 +125,15 @@ export default async function FicheEcole({
           <p className="text-xs text-zinc-400 mt-2">
             Position approximative basée sur la ville ({ecole.city.name}).
           </p>
+        </section>
+        <section className="mt-10">
+          {ecole.isVerified ? (
+            <div className="border border-emerald-200 bg-emerald-50 rounded-xl p-5 text-emerald-800 text-sm">
+              Cet établissement est vérifié et géré par son administration.
+            </div>
+          ) : (
+            <ClaimSchoolForm schoolId={ecole.id} />
+          )}
         </section>
       </div>
     </main>
