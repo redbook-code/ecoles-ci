@@ -1,8 +1,8 @@
-import CompareCheckbox from "@/components/CompareCheckbox";
-import CompareBar from "@/components/CompareBar";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Prisma } from "@prisma/client";
+import CompareCheckbox from "@/components/CompareCheckbox";
+import CompareBar from "@/components/CompareBar";
 
 const PAR_PAGE = 20;
 
@@ -31,7 +31,7 @@ export default async function Recherche({
     prisma.school.findMany({
       where,
       include: { city: true, commune: true },
-      orderBy: { name: "asc" },
+      orderBy: [{ isFeatured: "desc" }, { name: "asc" }],
       skip: (pageActuelle - 1) * PAR_PAGE,
       take: PAR_PAGE,
     }),
@@ -78,16 +78,22 @@ export default async function Recherche({
                       Établissement vérifié
                     </span>
                   )}
+                  {ecole.isFeatured && (
+                    <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                      Mis en avant
+                    </span>
+                  )}
                 </div>
                 <p className="text-sm text-zinc-500 mt-1">
                   {ecole.type} · {ecole.status} ·{" "}
                   {ecole.commune?.name ? `${ecole.commune.name}, ` : ""}
                   {ecole.city.name}
                 </p>
-              </div>                <CompareCheckbox ecole={{ id: ecole.id, slug: ecole.slug, name: ecole.name }} />
+                <CompareCheckbox ecole={{ id: ecole.id, slug: ecole.slug, name: ecole.name }} />
+              </div>
               <Link
                 href={`/ecole/${ecole.slug}`}
-                                className="px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-medium hover:bg-blue-800 transition"
+                className="px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-medium hover:bg-blue-800 transition"
               >
                 Voir l&apos;école
               </Link>
@@ -118,7 +124,8 @@ export default async function Recherche({
             )}
           </div>
         </div>
-      </div>      <CompareBar />
+      </div>
+      <CompareBar />
     </main>
   );
 }

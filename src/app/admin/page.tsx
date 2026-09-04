@@ -36,7 +36,7 @@ export default async function AdminDashboard({
           </h1>
           <Link
             href="/admin/ecoles/nouvelle"
-                       className="px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-medium hover:bg-blue-800 transition"
+            className="px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-medium hover:bg-blue-800 transition"
           >
             + Ajouter une école
           </Link>
@@ -70,6 +70,7 @@ export default async function AdminDashboard({
                 <th className="px-4 py-3">Statut</th>
                 <th className="px-4 py-3">Ville</th>
                 <th className="px-4 py-3">Vérifiée</th>
+                <th className="px-4 py-3">Mise en avant</th>
               </tr>
             </thead>
             <tbody>
@@ -90,6 +91,20 @@ export default async function AdminDashboard({
                     ) : (
                       <span className="text-zinc-400">Non</span>
                     )}
+                  </td>
+                  <td className="px-4 py-3">
+                    <form action={`/api/schools/${ecole.id}/toggle-featured`} method="POST">
+                      <button
+                        type="submit"
+                        className={`text-xs px-2 py-1 rounded ${
+                          ecole.isFeatured
+                            ? "bg-amber-100 text-amber-700"
+                            : "bg-zinc-100 text-zinc-500"
+                        }`}
+                      >
+                        {ecole.isFeatured ? "★ Mise en avant" : "Mettre en avant"}
+                      </button>
+                    </form>
                   </td>
                 </tr>
               ))}

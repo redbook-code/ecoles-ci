@@ -76,7 +76,10 @@ model School {
   email    String?
   website  String?
 
-  isVerified    Boolean @default(false)
+  isVerified Boolean @default(false)
+  isPremium  Boolean @default(false)
+  isFeatured Boolean @default(false)
+
   coverImageUrl String?
   logoUrl       String?
 
@@ -84,14 +87,15 @@ model School {
   sourceUrl      String?
   lastVerifiedAt DateTime?
 
-  photos     SchoolPhoto[]
-  programs   SchoolProgram[]
-  fees       SchoolFee[]
-  facilities SchoolFacility[]
-  reviews    SchoolReview[]
-  news       SchoolNews[]
-  events     SchoolEvent[]
-  claim      VerificationRequest?
+  photos             SchoolPhoto[]
+  programs           SchoolProgram[]
+  fees               SchoolFee[]
+  facilities         SchoolFacility[]
+  reviews            SchoolReview[]
+  news               SchoolNews[]
+  events             SchoolEvent[]
+  claim              VerificationRequest?
+  enrollmentRequests EnrollmentRequest[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -181,4 +185,17 @@ model VerificationRequest {
   userId   String
   status   String @default("PENDING")
   createdAt DateTime @default(now())
+}
+
+model EnrollmentRequest {
+  id           String   @id @default(cuid())
+  school       School   @relation(fields: [schoolId], references: [id])
+  schoolId     String
+  parentName   String
+  parentPhone  String
+  parentEmail  String?
+  studentLevel String?
+  message      String?
+  status       String   @default("NEW")
+  createdAt    DateTime @default(now())
 }

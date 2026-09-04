@@ -1,3 +1,4 @@
+import EnrollmentForm from "@/components/EnrollmentForm";
 import ClaimSchoolForm from "@/components/ClaimSchoolForm";
 import { getCoordonneesVille } from "@/lib/coordonnees-villes";
 import CarteEcoleUniqueWrapper from "@/components/CarteEcoleUniqueWrapper";import { prisma } from "@/lib/prisma";
@@ -144,6 +145,8 @@ export default async function FicheEcole({
           <p className="text-xs text-zinc-400 mt-2">
             Position approximative basée sur la ville ({ecole.city.name}).
           </p>
+        </section>        <section className="mt-10">
+          <EnrollmentForm schoolId={ecole.id} />
         </section>
         <section className="mt-10">
           {ecole.isVerified ? (
