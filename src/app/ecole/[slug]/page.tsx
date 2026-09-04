@@ -60,6 +60,7 @@ export default async function FicheEcole({
     include: {
       city: true,
       commune: true,
+      news: { orderBy: { createdAt: "desc" }, take: 5 },
     },
   });
 
@@ -102,6 +103,24 @@ export default async function FicheEcole({
             </p>
           </div>
         </div>
+        {ecole.news.length > 0 && (
+          <section className="mt-10">
+            <h2 className="text-xl font-semibold text-zinc-900 mb-3">
+              Actualités
+            </h2>
+            <div className="grid gap-3">
+              {ecole.news.map((actu) => (
+                <div key={actu.id} className="border border-zinc-200 rounded-xl p-4">
+                  <h3 className="font-medium text-zinc-900">{actu.title}</h3>
+                  <p className="text-sm text-zinc-600 mt-1">{actu.content}</p>
+                  <p className="text-xs text-zinc-400 mt-2">
+                    {new Date(actu.createdAt).toLocaleDateString("fr-FR")}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section>
           <h2 className="text-xl font-semibold text-zinc-900 mb-3">
