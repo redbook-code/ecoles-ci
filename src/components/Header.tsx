@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AdBanner from "@/components/AdBanner";
 
 export default function Header() {
   return (
@@ -21,6 +22,11 @@ export default function Header() {
             Administration
           </Link>
         </nav>
+      </div>
+      <div className="bg-white px-6 py-2">
+        <div className="max-w-6xl mx-auto">
+          <AdBanner placement="header" />
+        </div>
       </div>
     </header>
   );

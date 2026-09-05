@@ -35,7 +35,7 @@ export default function AdForm() {
 
   return (
     <div className="bg-white border border-zinc-200 rounded-xl p-6">
-      <h2 className="font-semibold text-zinc-900 mb-4">Ajouter une publicité</h2>
+      <h2 className="font-semibold text-zinc-900 mb-4">Ajouter une publicite</h2>
 
       {erreur && (
         <div className="bg-red-50 text-red-700 text-sm rounded-lg px-4 py-2 mb-4">
@@ -52,7 +52,7 @@ export default function AdForm() {
         />
         <input
           name="title"
-          placeholder="Titre de la publicité"
+          placeholder="Titre de la publicite"
           required
           className="px-3 py-2 border border-zinc-300 rounded-lg text-sm"
         />
@@ -74,9 +74,10 @@ export default function AdForm() {
           className="px-3 py-2 border border-zinc-300 rounded-lg text-sm"
         >
           <option value="">Emplacement</option>
+          <option value="header">En-tete (toutes les pages)</option>
           <option value="homepage">Page d&apos;accueil</option>
-          <option value="recherche">Résultats de recherche</option>
-          <option value="fiche_ecole">Fiche école</option>
+          <option value="recherche">Resultats de recherche</option>
+          <option value="fiche_ecole">Fiche ecole</option>
         </select>
         <div>
           <label className="text-xs text-zinc-500">
@@ -93,7 +94,7 @@ export default function AdForm() {
           disabled={loading}
           className="px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-medium hover:bg-blue-800 transition disabled:opacity-50 w-fit"
         >
-          {loading ? "Ajout..." : "Ajouter la publicité"}
+          {loading ? "Ajout..." : "Ajouter la publicite"}
         </button>
       </form>
     </div>
