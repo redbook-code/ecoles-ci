@@ -199,3 +199,17 @@ model EnrollmentRequest {
   status       String   @default("NEW")
   createdAt    DateTime @default(now())
 }
+model Ad {
+  id          String   @id @default(cuid())
+  title       String
+  advertiser  String
+  imageUrl    String
+  linkUrl     String
+  placement   String
+  isActive    Boolean  @default(true)
+  startDate   DateTime @default(now())
+  endDate     DateTime?
+  clicks      Int      @default(0)
+  impressions Int      @default(0)
+  createdAt   DateTime @default(now())
+}

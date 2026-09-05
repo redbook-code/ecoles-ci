@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AdBanner from "@/components/AdBanner";
 
 export default function Home() {
   return (
@@ -28,7 +29,7 @@ export default function Home() {
             placeholder="Ville / commune"
             className="flex-1 px-4 py-3 rounded-xl border border-zinc-200 text-zinc-900 outline-none"
           />
-                    <button
+          <button
             type="submit"
             className="px-6 py-3 rounded-xl bg-blue-900 text-white font-medium hover:bg-blue-800 transition"
           >
@@ -59,6 +60,10 @@ export default function Home() {
             </Link>
           ))}
         </div>
+      </section>
+
+      <section className="max-w-3xl mx-auto px-6 pb-16">
+        <AdBanner placement="homepage" />
       </section>
     </main>
   );
