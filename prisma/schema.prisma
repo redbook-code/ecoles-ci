@@ -213,3 +213,13 @@ model Ad {
   impressions Int      @default(0)
   createdAt   DateTime @default(now())
 }
+model PartnershipRequest {
+  id          String   @id @default(cuid())
+  schoolName  String
+  contactName String
+  phone       String
+  email       String?
+  message     String?
+  status      String   @default("NEW")
+  createdAt   DateTime @default(now())
+}

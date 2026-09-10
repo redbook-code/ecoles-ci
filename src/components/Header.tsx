@@ -17,6 +17,8 @@ export default function Header() {
           </Link>
           <Link href="/carte" className="hover:text-blue-200 transition">
             Carte
+          </Link>          <Link href="/partenaires" className="hover:text-blue-200 transition font-medium">
+            Devenir partenaire
           </Link>
           <Link href="/admin" className="hover:text-blue-200 transition">
             Administration
