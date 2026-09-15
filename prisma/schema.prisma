@@ -223,3 +223,16 @@ model PartnershipRequest {
   status      String   @default("NEW")
   createdAt   DateTime @default(now())
 }
+model Article {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String?
+  content     String
+  category    String   @default("EDUCATION")
+  coverImage  String?
+  author      String   @default("Redaction ECOLES CI")
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

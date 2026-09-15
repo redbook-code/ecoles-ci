@@ -1,8 +1,21 @@
+import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import AdBanner from "@/components/AdBanner";
 
-export default function Home() {
-  return (
+export default async function Home()  {
+    const articles = await prisma.article.findMany({
+    where: { isPublished: true },
+    orderBy: { createdAt: "desc" },
+    take: 3,
+  });
+
+  const LABELS_CATEGORIE: Record<string, string> = {
+    EDUCATION: "Education",
+    ORIENTATION: "Orientation",
+    EXAMENS: "Examens",
+    CONSEILS_PARENTS: "Conseils aux parents",
+    ACTUALITE: "Actualite du secteur",
+  };return (
     <main className="min-h-screen bg-white">
       <section className="relative flex flex-col items-center justify-center min-h-[85vh] px-6 text-center bg-gradient-to-b from-blue-900 to-blue-800 text-white">
         <h1 className="max-w-3xl text-4xl sm:text-5xl font-semibold tracking-tight">
@@ -63,7 +76,50 @@ export default function Home() {
       </section>
 
       <section className="max-w-3xl mx-auto px-6 pb-16">
-        <AdBanner placement="homepage" />
+        
+      {articles.length > 0 && (
+        <section className="max-w-5xl mx-auto px-6 py-16">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-semibold text-zinc-900">
+              Actualites scolaires
+            </h2>
+            <Link
+              href="/actualites"
+              className="text-sm text-blue-900 font-medium hover:underline"
+            >
+              Voir toutes les actualites →
+            </Link>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-6">
+            {articles.map((article) => (
+              <Link
+                key={article.id}
+                href={`/actualites/${article.slug}`}
+                className="block rounded-xl overflow-hidden border border-zinc-200 hover:shadow-md transition"
+              >
+                {article.coverImage ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={article.coverImage}
+                    alt={article.title}
+                    className="w-full h-40 object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-40 bg-blue-100" />
+                )}
+                <div className="p-4">
+                  <p className="text-xs text-blue-900 font-medium">
+                    {LABELS_CATEGORIE[article.category] ?? article.category}
+                  </p>
+                  <h3 className="font-semibold text-zinc-900 mt-1">
+                    {article.title}
+                  </h3>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}<AdBanner placement="homepage" />
       </section>
     </main>
   );
